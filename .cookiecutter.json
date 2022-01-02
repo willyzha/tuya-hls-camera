@@ -1,0 +1,10 @@
+{
+  "_template": "gh:oncleben31/cookiecutter-homeassistant-custom-component",
+  "class_name_prefix": "TuyaHlsCamera",
+  "domain_name": "tuya_hls_camera",
+  "friendly_name": "Tuya HLS Camera",
+  "github_user": "willyzha",
+  "project_name": "tuya-hls-camera",
+  "test_suite": "yes",
+  "version": "0.0.0"
+}

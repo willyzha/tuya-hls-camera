@@ -1,0 +1,10 @@
+{
+  "domain": "tuya_hls_camera",
+  "name": "Tuya HLS Camera",
+  "documentation": "https://github.com/willyzha/tuya-hls-camera",
+  "issue_tracker": "https://github.com/willyzha/tuya-hls-camera/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@willyzha"],
+  "requirements": []
+}
