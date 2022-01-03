@@ -1,4 +1,6 @@
 """Adds config flow for Tuya HLS Camera."""
+from __future__ import annotations
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback

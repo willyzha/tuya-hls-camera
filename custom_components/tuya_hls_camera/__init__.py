@@ -4,9 +4,12 @@ Custom integration to integrate Tuya HLS Camera with Home Assistant.
 For more details about this integration, please refer to
 https://github.com/willyzha/tuya-hls-camera
 """
+from __future__ import annotations
+
 import asyncio
-import logging
 from datetime import timedelta
+
+import requests
 
 from tuya_iot import (
     AuthType,
@@ -42,11 +45,10 @@ from .const import (
     CONF_PASSWORD,
     CONF_PROJECT_TYPE,
     CONF_USERNAME,
+    LOGGER,
  )
 
 SCAN_INTERVAL = timedelta(seconds=30)
-
-_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 async def async_setup(hass: HomeAssistant, config: Config):
     """Set up this integration using YAML is not supported."""

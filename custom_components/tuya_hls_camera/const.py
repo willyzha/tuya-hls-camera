@@ -1,3 +1,5 @@
+import logging
+
 from homeassistant.const import (
     Platform,
 )
@@ -11,6 +13,8 @@ VERSION = "0.0.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/willyzha/tuya-hls-camera/issues"
+
+LOGGER: logging.Logger = logging.getLogger(__package__)
 
 # Icons
 ICON = "mdi:format-quote-close"
