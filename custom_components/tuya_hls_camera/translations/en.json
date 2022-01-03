@@ -1,30 +1,42 @@
 {
   "config": {
-    "step": {
-      "user": {
-        "title": "Tuya HLS Camera",
-        "description": "If you need help with the configuration have a look here: https://github.com/willyzha/tuya-hls-camera",
-        "data": {
-          "username": "Username",
-          "password": "Password"
-        }
-      }
+    "abort": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "single_instance_allowed": "Already configured. Only a single configuration possible."
     },
     "error": {
-      "auth": "Username/Password is wrong."
+      "invalid_auth": "Invalid authentication",
+      "login_error": "Login error ({code}): {msg}"
     },
-    "abort": {
-      "single_instance_allowed": "Only a single instance is allowed."
-    }
-  },
-  "options": {
+    "flow_title": "Tuya configuration",
     "step": {
+      "login": {
+        "data": {
+          "access_id": "Access ID",
+          "access_secret": "Access Secret",
+          "country_code": "Country Code",
+          "endpoint": "Availability Zone",
+          "password": "Password",
+          "tuya_app_type": "Mobile App",
+          "username": "Account"
+        },
+        "description": "Enter your Tuya credential",
+        "title": "Tuya"
+      },
       "user": {
         "data": {
-          "binary_sensor": "Binary sensor enabled",
-          "sensor": "Sensor enabled",
-          "switch": "Switch enabled"
-        }
+          "access_id": "Tuya IoT Access ID",
+          "access_secret": "Tuya IoT Access Secret",
+          "country_code": "Country",
+          "password": "Password",
+          "platform": "The app where your account is registered",
+          "region": "Region",
+          "tuya_project_type": "Tuya cloud project type",
+          "username": "Account"
+        },
+        "description": "Enter your Tuya credentials",
+        "title": "Tuya Integration"
       }
     }
   }

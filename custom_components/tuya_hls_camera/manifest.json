@@ -3,8 +3,16 @@
   "name": "Tuya HLS Camera",
   "documentation": "https://github.com/willyzha/tuya-hls-camera",
   "issue_tracker": "https://github.com/willyzha/tuya-hls-camera/issues",
-  "dependencies": [],
+  "requirements": [
+    "tuya-iot-py-sdk==0.6.6"
+  ],
+  "dependencies": [
+    "ffmpeg"
+  ],
   "config_flow": true,
-  "codeowners": ["@willyzha"],
-  "requirements": []
+  "codeowners": [
+    "@willyzha"
+  ],
+  "iot_class": "cloud_push",
+  "version": "0.0.0"
 }
