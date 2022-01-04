@@ -14,6 +14,7 @@ from homeassistant.components.tuya import (HomeAssistantTuyaData, DeviceListener
 from homeassistant.components.tuya.camera import CAMERAS
 from homeassistant.helpers.event import async_track_point_in_utc_time
 from homeassistant.util.dt import utcnow
+from homeassistant.components.camera import SUPPORT_STREAM
 
 from tuya_iot import (
     TuyaDevice,
@@ -26,7 +27,7 @@ from .const import (
     LOGGER,
 )
 
-STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=9)
+STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=2)
 PLACEHOLDER = Path(__file__).parent / "placeholder.png"
 
 async def async_setup_entry(
@@ -62,6 +63,16 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
         self._stream_refresh_time: datetime.timedelta | None = None
         self._stream_refresh_unsub: Callable[[], None] | None = None
 
+    @property
+    def supported_features(self) -> int:
+        """Flag supported features."""
+        return SUPPORT_STREAM
+
+    @property
+    def is_recording(self) -> bool:
+        """Return true if the device is recording."""
+        return False
+
     async def stream_source(self) -> str:
         """Return the source of the stream."""
 
@@ -73,7 +84,7 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
             )
             self._stream_refresh_time = STREAM_EXPIRATION_TIMEDELTA + utcnow()
             LOGGER.error(
-                "Setup Initial stream: %s, expriy: %s",
+                "Setup Initial stream: %s, expiry: %s",
                 self._stream,
                 self._stream_refresh_time.isoformat())
             # Schedule a stream refresh
@@ -107,33 +118,28 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
                 self.device.id,
                 "hls",
             )
-        if self.stream:
+        if not self.stream:
+            await self.create_stream()
+            LOGGER.error("Create new stream source")
+        else:
             self.stream.update_source(self._stream)
+            LOGGER.error("Update stream source")
 
-        self._stream_refresh_time = utcnow() + STREAM_EXPIRATION_TIMEDELTA
         LOGGER.error(
-            "Refresh stream: %s, expriy: %s",
+            "Refresh stream: %s, expiry: %s",
             self._stream,
             self._stream_refresh_time.isoformat())
+        self._stream_refresh_time = utcnow() + STREAM_EXPIRATION_TIMEDELTA
 
         # Schedule next stream refresh
         self._schedule_stream_refresh()
 
-    # async def async_camera_image(
-    #     self, width: int | None = None, height: int | None = None
-    # ) -> bytes | None:
-    #     """Return a still image response from the camera."""
-    #     # stream_source = await self.stream_source()
-    #     # if not stream_source:
-    #     #     return None
-    #     # return await ffmpeg.async_get_image(
-    #     #     self.hass,
-    #     #     stream_source,
-    #     #     width=width,
-    #     #     height=height,
-    #     #     extra_cmd="-vframes 1 -q:v 2",
-    #     # )
-    #     # return await self.hass.async_add_executor_job(
-    #     #     PLACEHOLDER.read_bytes
-    #     # )
-    #     raise
+    async def async_camera_image(
+        self, width: int | None = None, height: int | None = None
+    ) -> bytes | None:
+        # """Return a still image response from the camera."""
+        # if not self.stream:
+        #     await self.create_stream()
+        # if self.stream:
+        #     return await self.stream.async_get_image(width, height)
+        return None
