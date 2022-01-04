@@ -27,7 +27,7 @@ from .const import (
     LOGGER,
 )
 
-STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=2)
+STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=9)
 PLACEHOLDER = Path(__file__).parent / "placeholder.png"
 
 async def async_setup_entry(
@@ -62,16 +62,6 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
         self._stream: str | None = None
         self._stream_refresh_time: datetime.timedelta | None = None
         self._stream_refresh_unsub: Callable[[], None] | None = None
-
-    @property
-    def supported_features(self) -> int:
-        """Flag supported features."""
-        return SUPPORT_STREAM
-
-    @property
-    def is_recording(self) -> bool:
-        """Return true if the device is recording."""
-        return False
 
     async def stream_source(self) -> str:
         """Return the source of the stream."""
@@ -110,9 +100,6 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
 
     async def _handle_stream_refresh(self, now: datetime.datetime) -> None:
         """Alarm that fires to get a new stream."""
-        if not self._stream:
-            return
-
         self._stream = await self.hass.async_add_executor_job(
                 self.device_manager.get_device_stream_allocate,
                 self.device.id,
@@ -133,13 +120,3 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
 
         # Schedule next stream refresh
         self._schedule_stream_refresh()
-
-    async def async_camera_image(
-        self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        # """Return a still image response from the camera."""
-        # if not self.stream:
-        #     await self.create_stream()
-        # if self.stream:
-        #     return await self.stream.async_get_image(width, height)
-        return None
