@@ -112,7 +112,7 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
             self.stream.update_source(self._stream)
             LOGGER.error("Update stream source")
 
-        if not self.stream.available():
+        if not self.stream.available:
             self.stream.start()
 
         LOGGER.error(
