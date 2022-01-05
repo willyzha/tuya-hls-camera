@@ -112,6 +112,9 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
             self.stream.update_source(self._stream)
             LOGGER.error("Update stream source")
 
+        if not self.stream.available():
+            self.stream.start()
+
         LOGGER.error(
             "Refresh stream: %s, expiry: %s",
             self._stream,
