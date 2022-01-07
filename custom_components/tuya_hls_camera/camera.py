@@ -27,7 +27,7 @@ from .const import (
     LOGGER,
 )
 
-STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=9)
+STREAM_EXPIRATION_TIMEDELTA = datetime.timedelta(minutes=7)
 PLACEHOLDER = Path(__file__).parent / "placeholder.png"
 
 async def async_setup_entry(
