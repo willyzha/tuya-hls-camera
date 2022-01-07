@@ -100,20 +100,29 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
 
     async def _handle_stream_refresh(self, now: datetime.datetime) -> None:
         """Alarm that fires to get a new stream."""
+
+        _initial_keep_alive = False
         if self.stream:
+            LOGGER.error("Stopping stream")
+            # Save ane set keep alive to false before stopping stream
+            _initial_keep_alive = self.stream.keep_alive
             self.stream.keep_alive = False
             self.stream.stop()
 
+        LOGGER.error("Fetch new tuya stream source")
         self._stream = await self.hass.async_add_executor_job(
                 self.device_manager.get_device_stream_allocate,
                 self.device.id,
                 "hls",
             )
-        self.stream.update_source(self._stream)
-        LOGGER.error("Update stream source")
 
         if self.stream:
+            self.stream.update_source(self._stream)
+            LOGGER.error("Update stream source")
             self.stream.start()
+
+            # Restore keep alive after starting stream
+            self.stream.keep_alive = _initial_keep_alive
 
         self._stream_refresh_time = utcnow() + STREAM_EXPIRATION_TIMEDELTA
         LOGGER.error(
