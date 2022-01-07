@@ -109,12 +109,22 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
             self.stream.keepalive = False
             self.stream.stop()
 
-        LOGGER.error("Fetch new tuya stream source")
-        self._stream = await self.hass.async_add_executor_job(
-                self.device_manager.get_device_stream_allocate,
-                self.device.id,
-                "hls",
+        while True:
+            LOGGER.error("Fetch new tuya stream source")
+            self._stream = await self.hass.async_add_executor_job(
+                    self.device_manager.get_device_stream_allocate,
+                    self.device.id,
+                    "hls",
+                )
+
+            image = await ffmpeg.async_get_image(
+                self.hass,
+                self._stream,
             )
+            LOGGER.error("Image returned %r", image)
+            if image:
+                break
+            sleep(30)
 
         if self.stream:
             self.stream.update_source(self._stream)
