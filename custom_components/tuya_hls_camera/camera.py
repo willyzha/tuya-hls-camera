@@ -121,7 +121,6 @@ class TuyaHlsCameraEntity(TuyaCameraEntity):
                 self.hass,
                 self._stream,
             )
-            LOGGER.error("Image returned %r", image)
             if image:
                 break
             sleep(30)
